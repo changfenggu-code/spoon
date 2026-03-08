@@ -1,8 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(powershell -File d:/projects/spoon/skills/scripts/run-cmd.ps1 scoop search pkl)",
-      "Bash(powershell -File d:/projects/spoon/skills/scripts/run-cmd.ps1 git init)"
+      "Bash(gh release view --repo apple/pkl-vscode --json tagName,assets --jq '{tag: .tagName, files: [.assets[].name]}')",
+      "Bash(powershell -File d:/projects/spoon/skills/scripts/run-cmd.ps1 gh release view --repo apple/pkl-vscode --json tagName,assets --jq \"{tag: .tagName, files: [.assets[].name]}\")"
     ]
   },
   "hooks": {

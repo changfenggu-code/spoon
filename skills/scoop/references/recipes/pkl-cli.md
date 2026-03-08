@@ -23,12 +23,17 @@ pkl-cli works out of the box with no mandatory configuration. Optional setup:
 
 ### Editor support
 
-If the user works in VS Code, suggest installing the Pkl extension for syntax highlighting, code completion, and validation. The extension is **not on the VS Code Marketplace** — it must be installed manually from GitHub:
+If the user works in VS Code, offer to install the Pkl extension for syntax highlighting, code completion, and validation. The extension is **not on the VS Code Marketplace** — download the `.vsix` from GitHub and install automatically:
 
-1. Download the latest `.vsix` from https://github.com/apple/pkl-vscode/releases/latest/
-2. In VS Code: `Ctrl+Shift+P` → "Extensions: Install from VSIX..." → select the downloaded file
+Uses `gh` CLI (installed with scoop by default):
 
-Note: The extension requires **Java 22+** to run the Pkl Language Server. It looks for Java in `PATH` or `JAVA_HOME`, or can be configured via `pkl.lsp.java.path`.
+```bash
+# Download latest .vsix and install into VS Code
+powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 gh release download --repo apple/pkl-vscode --pattern "*.vsix" --dir "$TEMP"
+code --install-extension "$TEMP\pkl-vscode-*.vsix"
+```
+
+Note: The extension requires **Java 22+** to run the Pkl Language Server. It looks for Java in `PATH` or `JAVA_HOME`, or can be configured via the `pkl.lsp.java.path` setting. If Java is not available, ask the user whether to install it via scoop (`scoop install temurin22-jdk`).
 
 ### Environment variable (optional)
 

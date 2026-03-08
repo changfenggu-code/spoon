@@ -96,10 +96,10 @@ export PATH="$SCOOP/shims:$PATH"
 
 ### 第五步：安装并配置 git
 
-scoop 的 bucket 由 git 管理，所以 git 是必装的：
+scoop 的 bucket 由 git 管理，所以 git 是必装的。同时安装 gh（GitHub CLI），用于 GitHub release 下载、仓库管理等，部分安装后 recipe 也会用到：
 
 ```bash
-powershell -Command "scoop install git"
+powershell -Command "scoop install git gh"
 ```
 
 装完 git 后，先把 git 的 bash 和 Unix 工具加到 PATH。scoop 只 shim 了 `git`、`sh`、`git-bash` 等少数几个，`bash.exe` 和 Unix 工具（`less`、`awk` 等）在 git 自己的目录下，需要手动加 PATH：

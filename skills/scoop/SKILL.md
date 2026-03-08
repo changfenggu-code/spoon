@@ -110,13 +110,14 @@ Advise the user to **restart VSCode** after installation is complete so that all
 
 ### Step 5: Install and configure git
 
-Scoop buckets are managed by git. Immediately after installing scoop, install git:
+Scoop buckets are managed by git. Immediately after installing scoop, install git and gh (GitHub CLI):
 
 ```bash
-powershell -Command "scoop install git"
+powershell -Command "scoop install git gh"
 ```
 
-This is mandatory — without git, bucket operations (add, update) will not work.
+git is mandatory — without it, bucket operations (add, update) will not work.
+gh is strongly recommended — it enables GitHub release downloads, repo management, and is used by some post-install recipes.
 
 After installing git, add git's bash and Unix tools to PATH. Scoop only shims a few binaries (`git`, `sh`, `git-bash`), but `bash.exe` and Unix utilities (`less`, `awk`, etc.) live in git's own directories and need explicit PATH entries:
 
@@ -178,6 +179,7 @@ Report to the user:
 - `SCOOP` environment variable set to `<install_path>`
 - `<install_path>\shims` added to user PATH
 - git installed at `<install_path>\apps\git\current`
+- gh installed at `<install_path>\apps\gh\current`
 - Buckets cloned to `<install_path>\buckets\`
 - Directories created: `<install_path>\{apps,buckets,cache,persist,shims}`
 
