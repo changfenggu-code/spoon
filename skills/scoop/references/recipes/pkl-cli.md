@@ -23,12 +23,17 @@ pkl-cli works out of the box with no mandatory configuration. Optional setup:
 
 ### Editor support
 
-If the user works in VS Code, offer to install the Pkl extension for syntax highlighting, code completion, and validation. The extension is **not on the VS Code Marketplace** — download the `.vsix` from GitHub and install automatically:
+Use AskUserQuestion to ask whether the user wants to install the Pkl VS Code extension (syntax highlighting, code completion, validation).
 
-Uses `gh` CLI (installed with scoop by default):
+If the user wants it, first check if already installed:
 
 ```bash
-# Download latest .vsix and install into VS Code
+code --list-extensions | grep -i pkl
+```
+
+If already installed, report the installed version and skip. If not installed, download and install automatically. The extension is **not on the VS Code Marketplace** — use `gh` CLI (installed with scoop by default):
+
+```bash
 powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 gh release download --repo apple/pkl-vscode --pattern "*.vsix" --dir "$TEMP"
 code --install-extension "$TEMP\pkl-vscode-*.vsix"
 ```

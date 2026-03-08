@@ -25,12 +25,17 @@ pkl-cli 开箱即用，无需强制配置。可选设置：
 
 ### 编辑器支持
 
-如果用户使用 VS Code，提议安装 Pkl 扩展以获得语法高亮、代码补全和验证。该扩展**未发布到 VS Code Marketplace**，从 GitHub 下载 `.vsix` 后自动安装：
+通过 AskUserQuestion 询问用户是否需要安装 Pkl VS Code 扩展（语法高亮、代码补全、验证）。
 
-使用 `gh` CLI（随 scoop 默认安装）：
+如果用户需要，先检查是否已安装：
 
 ```bash
-# 下载最新 .vsix 并安装到 VS Code
+code --list-extensions | grep -i pkl
+```
+
+已安装则报告版本并跳过。未安装则自动下载安装。该扩展**未发布到 VS Code Marketplace**，使用 `gh` CLI（随 scoop 默认安装）：
+
+```bash
 powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 gh release download --repo apple/pkl-vscode --pattern "*.vsix" --dir "$TEMP"
 code --install-extension "$TEMP\pkl-vscode-*.vsix"
 ```
