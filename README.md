@@ -13,7 +13,7 @@ Manages the [Scoop](https://scoop.sh/) package manager and all software installe
 - Install/uninstall/update scoop and packages
 - Bucket management (add, remove, list)
 - Health checks and cache cleanup
-- Post-install recipes for tools that need extra configuration (e.g., claude-code, codex)
+- Post-install recipes for tools that need extra configuration (e.g., claude-code, codex, pkl-cli)
 
 ### proxy
 
@@ -38,7 +38,8 @@ spoon/
 │   │       ├── guide-zh.md       # Skill guide (Chinese)
 │   │       └── recipes/          # Post-install configuration recipes
 │   │           ├── claude-code.md / claude-code-zh.md
-│   │           └── codex.md / codex-zh.md
+│   │           ├── codex.md / codex-zh.md
+│   │           └── pkl-cli.md / pkl-cli-zh.md
 │   ├── proxy/
 │   │   ├── SKILL.md          # Proxy skill definition
 │   │   └── references/
