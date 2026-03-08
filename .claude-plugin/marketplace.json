@@ -1,5 +1,4 @@
 {
-  "$schema": "https://anthropic.com/claude-code/marketplace.schema.json",
   "name": "spoon",
   "version": "1.0.0",
   "owner": {
@@ -10,7 +9,10 @@
     {
       "name": "spoon",
       "description": "Windows development environment management toolkit. Manages software installation, configuration, and maintenance via scoop and other tools.",
-      "source": ".",
+      "source": {
+        "source": "github",
+        "repo": "VIDLG/spoon"
+      },
       "category": "development"
     }
   ]
