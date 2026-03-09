@@ -6,6 +6,7 @@
 
 以下场景建议安装 pkl-cli：
 
+- 用户说"安装 pkl"、"我要 pkl"、"配置 pkl"（scoop 包名是 `pkl-cli`，但用户通常只说 "pkl"）
 - 用户使用 `.pkl` 配置文件
 - 需要从结构化配置生成 JSON、YAML 或 Property Lists
 - 提及 Pkl、Apple 配置语言、"配置即代码"

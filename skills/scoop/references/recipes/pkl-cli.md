@@ -4,6 +4,7 @@
 
 Install pkl-cli when the user:
 
+- Says "install pkl", "I need pkl", "set up pkl" (the scoop package name is `pkl-cli`, but users typically just say "pkl")
 - Works with `.pkl` configuration files
 - Needs to generate JSON, YAML, or Property Lists from structured configuration
 - Mentions Pkl, Apple's configuration language, or "configuration as code"
