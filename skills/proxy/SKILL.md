@@ -32,13 +32,13 @@ Before configuring proxy or mirrors, detect which tools are installed:
 
 ```bash
 # Check each tool (use run-cmd.ps1 to refresh PATH)
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 rustup --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 cargo --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 rustup --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 cargo --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version 2>&1
 ```
 
 Only configure tools that are found. Skip the rest silently.
@@ -49,43 +49,43 @@ Only configure tools that are found. Skip the rest silently.
 
 ```bash
 # Enable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global http.proxy <proxy_url>
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global https.proxy <proxy_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global http.proxy <proxy_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global https.proxy <proxy_url>
 
 # Disable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global --unset http.proxy
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global --unset https.proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global --unset http.proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global --unset https.proxy
 
 # Check
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global --get http.proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global --get http.proxy
 ```
 
 ### Scoop
 
 ```bash
 # Enable (host:port format, no http:// prefix)
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop config proxy <host>:<port>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop config proxy <host>:<port>
 
 # Disable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop config rm proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop config rm proxy
 
 # Check
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop config proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop config proxy
 ```
 
 ### npm
 
 ```bash
 # Enable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config set proxy <proxy_url>
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config set https-proxy <proxy_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config set proxy <proxy_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config set https-proxy <proxy_url>
 
 # Disable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config delete proxy
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config delete https-proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config delete proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config delete https-proxy
 
 # Check
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config get proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config get proxy
 ```
 
 ### pip
@@ -93,13 +93,13 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config get proxy
 ```bash
 # Proxy is set via environment variable or pip config
 # Enable (writes to pip config)
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config set global.proxy <proxy_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config set global.proxy <proxy_url>
 
 # Disable
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config unset global.proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config unset global.proxy
 
 # Check
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config get global.proxy
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config get global.proxy
 ```
 
 ### Cargo (Rust)
@@ -137,24 +137,26 @@ Use AskUserQuestion with these options:
 | Option | Provider | URL |
 |--------|----------|-----|
 | 1 (Recommended) | Gitee 镜像 | `SCOOP_REPO`: `https://gitee.com/scoop-installer/scoop` |
-| 2 | scoop-proxy-cn | `SCOOP_REPO`: `https://gh-proxy.org/github.com/ScoopInstaller/Scoop` |
+| 2 | scoop-proxy-cn | `SCOOP_REPO`: `https://gh-proxy.org/github.com/ScoopInstaller/Scoop` (mirrors both index and downloads) |
 
 **Gitee mirror** — replace each bucket with its Gitee counterpart:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop config SCOOP_REPO https://gitee.com/scoop-installer/scoop
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop bucket rm main
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop bucket add main https://gitee.com/scoop-installer/Main
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop config SCOOP_REPO https://gitee.com/scoop-installer/scoop
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop bucket rm main
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop bucket add main https://gitee.com/scoop-installer/Main
 # Repeat for extras, java, etc. using https://gitee.com/scoop-installer/<BucketName>
 ```
+
+**Important**: Gitee mirrors only accelerate **bucket manifests** (package index). The actual download URLs inside manifests still point to GitHub. If GitHub is inaccessible, you still need either a proxy for downloads or use **scoop-proxy-cn** (which rewrites download URLs via gh-proxy.org).
 
 Note: Gitee mirrors sync every ~10 days, packages may lag behind.
 
 **scoop-proxy-cn**:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop config SCOOP_REPO https://gh-proxy.org/github.com/ScoopInstaller/Scoop
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop bucket add spc https://gitee.com/wlzwme/scoop-proxy-cn.git
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop config SCOOP_REPO https://gh-proxy.org/github.com/ScoopInstaller/Scoop
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop bucket add spc https://gitee.com/wlzwme/scoop-proxy-cn.git
 ```
 
 ### npm — Registry mirrors
@@ -168,10 +170,10 @@ Use AskUserQuestion with these options:
 | 3 | 华为云 | `https://repo.huaweicloud.com/repository/npm/` |
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config set registry <chosen_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config set registry <chosen_url>
 
 # Restore official
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm config set registry https://registry.npmjs.org
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm config set registry https://registry.npmjs.org
 ```
 
 ### pip — Index mirrors
@@ -186,12 +188,12 @@ Use AskUserQuestion with these options:
 | 4 | 腾讯云 | `https://mirrors.cloud.tencent.com/pypi/simple` |
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config set global.index-url <chosen_url>
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config set global.trusted-host <chosen_host>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config set global.index-url <chosen_url>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config set global.trusted-host <chosen_host>
 
 # Restore official
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config set global.index-url https://pypi.org/simple
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip config unset global.trusted-host
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config set global.index-url https://pypi.org/simple
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip config unset global.trusted-host
 ```
 
 ### Rustup — Toolchain distribution mirrors

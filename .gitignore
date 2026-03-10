@@ -3,3 +3,9 @@ install.ps1
 
 # Local settings (contains machine-specific permissions)
 .claude/settings.local.json
+
+# Rust build artifacts
+ai-setup/target/
+
+# Compiled binary (build with: cargo xtask deploy)
+ai-setup.exe

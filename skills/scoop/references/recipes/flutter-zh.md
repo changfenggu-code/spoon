@@ -14,7 +14,7 @@ Flutter 是跨平台 UI 开发工具包。需要以下场景时安装：
 ## 安装
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install flutter
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install flutter
 ```
 
 ## 安装后配置
@@ -24,7 +24,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install flutter
 安装完成后，先确认 Flutter SDK 本体已经可执行：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version
 ```
 
 ### 使用 `flutter doctor` 检查缺失依赖
@@ -32,7 +32,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
 Flutter 的后续配置不应靠猜，而应以 `flutter doctor` 的输出为准：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor
 ```
 
 `flutter doctor` 会告诉你当前缺哪些平台工具链或组件。
@@ -68,7 +68,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor
 如果 `flutter doctor` 提示 Android licenses 未接受，再执行：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor --android-licenses
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor --android-licenses
 ```
 
 ### 代理与镜像
@@ -85,20 +85,20 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor --andro
 基础验证：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 dart --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 dart --version
 ```
 
 环境验证：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor
 ```
 
 ## 卸载
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall flutter
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall flutter
 ```
 
 卸载 `flutter` 本身不会自动移除外部平台依赖，例如 Android Studio、Android SDK、Chrome 或 Visual Studio。

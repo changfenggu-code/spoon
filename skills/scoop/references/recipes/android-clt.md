@@ -14,7 +14,7 @@ Installing `android-clt` only provides the command-line tools themselves. It doe
 ## Install
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install android-clt
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install android-clt
 ```
 
 ## Post-Install Configuration
@@ -24,13 +24,13 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install android-
 After installation, first confirm that `sdkmanager` is available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --version
 ```
 
 If you also want to confirm AVD tooling availability:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 avdmanager --help
+powershell -File <plugin_root>/scripts/run-cmd.ps1 avdmanager --help
 ```
 
 ### Install Android SDK components only as needed
@@ -40,7 +40,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 avdmanager --help
 List available components first:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --list
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --list
 ```
 
 Common optional components include:
@@ -57,7 +57,7 @@ When installing components, use `sdkmanager` with explicit package names.
 If the build tooling or downstream tools report unaccepted licenses, then run:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --licenses
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --licenses
 ```
 
 ### Do not conflate this with the full platform stack
@@ -80,25 +80,25 @@ If Scoop fails to download `android-clt`, or `sdkmanager` is slow when fetching 
 Basic verification:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --version
 ```
 
 On-demand verification:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --list
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --list
 ```
 
 If the user has installed `platform-tools`, you can also verify:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 adb version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 adb version
 ```
 
 ## Uninstall
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall android-clt
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall android-clt
 ```
 
 Uninstalling `android-clt` itself should not automatically remove installed Android SDK components, AVDs, `~/.android`, or other Android development data.

@@ -22,7 +22,7 @@ Use AskUserQuestion to let the user choose which release line to install:
 If the user has no clear preference, default to `nodejs`:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install <chosen_package>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install <chosen_package>
 ```
 
 ## Post-Install Configuration
@@ -46,15 +46,15 @@ Delegate all npm network configuration to the `proxy` skill, including:
 First confirm that Node.js and npm are available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 node --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npx --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 node --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npx --version
 ```
 
 If you need to verify npm network access:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm ping
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm ping
 ```
 
 ## Uninstall
@@ -62,7 +62,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm ping
 Uninstall whichever package was installed (`nodejs` or `nodejs-lts`):
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall <chosen_package>
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall <chosen_package>
 ```
 
 After uninstalling, use AskUserQuestion to ask about leftover data:

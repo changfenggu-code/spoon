@@ -1,19 +1,28 @@
-# Spoon
+﻿# Spoon
 
 A Claude Code plugin for managing Windows development environments.
 
-Spoon automates software installation, configuration, and maintenance through a set of skills that Claude Code can invoke during conversations.
+Spoon focuses on two areas:
+
+- Scoop package manager operations for general Windows development tools
+- Proxy and mirror management across common development tooling
+
+AI workstation bootstrap is handled separately by the Rust project in `ai-setup/`. That executable owns Git, Claude Code, Codex, proxy bootstrap, and AI helper CLI installation.
 
 ## Skills
 
 ### scoop
 
-Manages the [Scoop](https://scoop.sh/) package manager and all software installed through it.
+Manages the [Scoop](https://scoop.sh/) package manager and software installed through it.
 
-- Install/uninstall/update scoop and packages
+- Install/uninstall/update scoop and scoop packages
 - Bucket management (add, remove, list)
 - Health checks and cache cleanup
-- Post-install recipes for tools that need extra configuration (e.g., claude-code, codex, pkl-cli)
+- Post-install recipes for scoop-managed tools that need extra setup (android-clt, flutter, nodejs, pixi, pkl-cli, rustup)
+
+### ai-toolchain
+
+Usage guide for the workstation tools provisioned by `ai-setup.exe` (git, gh, rg, fd, jq, yq, bat, delta, sg, python, which, make, 7z, just).
 
 ### proxy
 
@@ -25,64 +34,59 @@ Manages proxy and mirror configuration across development tools.
 
 ## Project Structure
 
-```
+```text
 spoon/
+├── ai-setup/                  # Rust CLI/TUI project for AI workstation setup
 ├── .claude-plugin/
-│   ├── plugin.json          # Plugin metadata
-│   └── marketplace.json     # Marketplace definition
+│   ├── plugin.json
+│   └── marketplace.json
 ├── skills/
 │   ├── scoop/
-│   │   ├── SKILL.md          # Scoop skill definition
+│   │   ├── SKILL.md
 │   │   └── references/
-│   │       ├── commands.md       # Command reference
-│   │       ├── commands-zh.md    # Command reference (Chinese)
-│   │       ├── guide-zh.md       # Skill guide (Chinese)
-│   │       └── recipes/          # Post-install configuration recipes
-│   │           ├── claude-code.md / claude-code-zh.md
-│   │           ├── codex.md / codex-zh.md
-│   │           └── pkl-cli.md / pkl-cli-zh.md
+│   │       ├── commands.md / commands-zh.md
+│   │       ├── guide-zh.md
+│   │       └── recipes/            # Post-install recipes (en + zh pairs)
+│   │           └── android-clt, flutter, nodejs, pixi, pkl-cli, rustup
 │   ├── proxy/
-│   │   ├── SKILL.md          # Proxy skill definition
+│   │   ├── SKILL.md
 │   │   └── references/
-│   │       └── guide-zh.md       # Skill guide (Chinese)
-│   └── scripts/
-│       ├── run-cmd.ps1       # Run commands with fresh PATH from registry
-│       └── add-path.ps1      # Add/remove scoop app subdirectories to/from PATH
-├── CLAUDE.md                 # Project-level instructions for Claude Code
-└── README.md
+│   │       └── guide-zh.md
+│   └── ai-toolchain/
+│       ├── SKILL.md
+│       └── SKILL-zh.md
+├── scripts/
+│   ├── run-cmd.ps1
+│   └── add-path.ps1
+├── CLAUDE.md
+├── README.md
+└── README-zh.md
 ```
 
+## AI Setup
+
+The `ai-setup/` directory contains a Rust CLI/TUI for AI workstation bootstrap. Build the binary with:
+
+```text
+cd ai-setup && cargo xtask deploy
+```
+
+This compiles a release build and copies `ai-setup.exe` to the repository root (gitignored). Examples:
+
+```text
+.\ai-setup.exe
+.\ai-setup.exe --action status --non-interactive
+.\ai-setup.exe --action install --tools git,claude,codex,rg
+```
 ## Installation
 
 In Claude Code, run:
 
-```
+```text
 /plugin marketplace add VIDLG/spoon
 ```
 
 Then install the spoon plugin from the marketplace. The plugin will be available across all your projects.
-
-### Team setup
-
-To auto-enable spoon for all team members on a project, add to your project's `.claude/settings.json`:
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "spoon": {
-      "source": {
-        "source": "github",
-        "repo": "VIDLG/spoon"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "spoon@spoon": true
-  }
-}
-```
-
-Team members will be prompted to install the plugin when they trust the project.
 
 ## Requirements
 
@@ -92,3 +96,5 @@ Team members will be prompted to install the plugin when they trust the project.
 ## License
 
 MIT
+
+

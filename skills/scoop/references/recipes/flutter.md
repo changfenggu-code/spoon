@@ -14,7 +14,7 @@ Installing `flutter` provides the Flutter SDK and related CLI tools, but it does
 ## Install
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install flutter
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install flutter
 ```
 
 ## Post-Install Configuration
@@ -24,7 +24,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install flutter
 After installation, first confirm that the Flutter SDK binary is available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version
 ```
 
 ### Use `flutter doctor` to detect missing dependencies
@@ -32,7 +32,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
 Do not guess the rest of the setup. Use `flutter doctor` as the source of truth:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor
 ```
 
 `flutter doctor` will report which platform toolchains or components are still missing.
@@ -68,7 +68,7 @@ If the user only targets web or Windows desktop, this step can be skipped.
 If `flutter doctor` reports unaccepted Android licenses, then run:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor --android-licenses
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor --android-licenses
 ```
 
 ### Proxy and mirrors
@@ -85,20 +85,20 @@ That usually involves:
 Basic verification:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 dart --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 dart --version
 ```
 
 Environment verification:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter doctor
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter doctor
 ```
 
 ## Uninstall
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall flutter
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall flutter
 ```
 
 Uninstalling `flutter` itself does not automatically remove external platform dependencies such as Android Studio, Android SDK, Chrome, or Visual Studio.

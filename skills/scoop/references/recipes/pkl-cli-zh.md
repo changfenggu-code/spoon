@@ -1,47 +1,47 @@
-# pkl-cli — 安装配置方案（中文说明）
-
-本文件是 `pkl-cli.md` 的中文对照版。实际执行以英文版为准。
+﻿# pkl-cli - 安装后配置（中文）
 
 ## 何时安装
 
-以下场景建议安装 pkl-cli：
+适用于以下场景：
 
-- 用户说"安装 pkl"、"我要 pkl"、"配置 pkl"（scoop 包名是 `pkl-cli`，但用户通常只说 "pkl"）
-- 用户使用 `.pkl` 配置文件
-- 需要从结构化配置生成 JSON、YAML 或 Property Lists
-- 提及 Pkl、Apple 配置语言、"配置即代码"
-- 需要从命令行验证或评估 Pkl 模块
-
-Pkl 是 Apple 推出的配置即代码语言，结合了声明式格式（JSON/YAML）的简洁性和编程语言特性（类、函数、条件、类型验证）。CLI 工具评估 `.pkl` 文件并输出为 JSON、YAML、plist 等格式。
+- 用户说“安装 pkl”“我要 pkl”“配置 pkl”
+- 需要处理 `.pkl` 配置文件
+- 需要从结构化配置生成 JSON、YAML、plist
+- 提到 Apple 的 Pkl 配置语言
+- 需要在命令行验证或执行 Pkl 模块
 
 ## 安装
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install pkl-cli
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install pkl-cli
 ```
 
 ## 安装后配置
 
-pkl-cli 开箱即用，无需强制配置。可选设置：
+pkl-cli 本身几乎开箱即用。可选项主要是 VS Code 扩展。
 
 ### 编辑器支持
 
-通过 AskUserQuestion 询问用户是否需要安装 Pkl VS Code 扩展（语法高亮、代码补全、验证）。
-
-如果用户需要，先检查是否已安装：
+先检查是否已经安装 Pkl VS Code 扩展：
 
 ```bash
 code --list-extensions | grep -i pkl
 ```
 
-已安装则报告版本并跳过。未安装则自动下载安装。该扩展**未发布到 VS Code Marketplace**，使用 `gh` CLI（随 scoop 默认安装）：
+如果未安装，可直接通过 GitHub Release API 下载最新 VSIX 并安装，这样就不再依赖额外的 CLI。
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 gh release download --repo apple/pkl-vscode --pattern "*.vsix" --dir "$TEMP"
+powershell -Command '$release = Invoke-RestMethod -Uri "https://api.github.com/repos/apple/pkl-vscode/releases/latest"; $asset = $release.assets | Where-Object { $_.name -like "*.vsix" } | Select-Object -First 1; if (-not $asset) { throw "No VSIX asset found" }; $target = Join-Path $env:TEMP $asset.name; Invoke-WebRequest -Uri $asset.browser_download_url -OutFile $target; Write-Output $target'
 code --install-extension "$TEMP\pkl-vscode-*.vsix"
 ```
 
-注意：该扩展需要 **Java 22+** 来运行 Pkl Language Server。默认从 `PATH` 或 `JAVA_HOME` 查找 Java，也可通过 `pkl.lsp.java.path` 设置。如果 Java 不可用，询问用户是否通过 scoop 安装（`scoop install temurin22-jdk`）。
+如果 GitHub 无法访问，应先配置代理，或者手动下载 VSIX。
+
+该扩展需要 Java 22+ 来运行 Pkl Language Server。如未安装 Java，可继续通过 scoop 安装：
+
+```bash
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install temurin22-jdk
+```
 
 ### 环境变量（可选）
 
@@ -49,20 +49,16 @@ code --install-extension "$TEMP\pkl-vscode-*.vsix"
 |------|------|--------|
 | `PKL_HOME` | Pkl 缓存和包的自定义目录 | `~/.pkl` |
 
-`PKL_HOME` 很少需要设置，仅在用户想自定义缓存位置时使用。
+## 验证
 
-### 验证
-
-安装后运行 `pkl-cli --version` 确认安装成功。
+```bash
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pkl-cli --version
+```
 
 ## 卸载
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall pkl-cli
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall pkl-cli
 ```
 
-卸载后，通过 AskUserQuestion 询问用户是否清理残留数据：
 
-- **保留** — 保留 `~/.pkl` 缓存目录，以便将来重装时复用
-- **清除** — 删除 `~/.pkl` 目录
-- **先查看** — 展示目录大小后再决定

@@ -14,7 +14,7 @@
 ## 安装
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install android-clt
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install android-clt
 ```
 
 ## 安装后配置
@@ -24,13 +24,13 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install android-
 安装完成后，先确认 `sdkmanager` 已可执行：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --version
 ```
 
 如需确认 AVD 相关命令也可用：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 avdmanager --help
+powershell -File <plugin_root>/scripts/run-cmd.ps1 avdmanager --help
 ```
 
 ### 按需安装 Android SDK 组件
@@ -40,7 +40,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 avdmanager --help
 先列出可用组件：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --list
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --list
 ```
 
 常见按需组件包括：
@@ -57,7 +57,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --list
 如果构建工具或下游工具链提示 licenses 未接受，再执行：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --licenses
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --licenses
 ```
 
 ### 平台依赖不要混为一谈
@@ -80,25 +80,25 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --licenses
 基础验证：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --version
 ```
 
 按需验证：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 sdkmanager --list
+powershell -File <plugin_root>/scripts/run-cmd.ps1 sdkmanager --list
 ```
 
 如果用户已安装 `platform-tools`，还可以进一步验证：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 adb version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 adb version
 ```
 
 ## 卸载
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall android-clt
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall android-clt
 ```
 
 卸载 `android-clt` 本身不应默认自动删除已安装的 Android SDK 组件、AVD、`~/.android` 或其他 Android 开发数据。

@@ -14,7 +14,7 @@ Installing `pixi` only provides the command itself. It does not automatically cr
 ## Install
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install main/pixi
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install main/pixi
 ```
 
 ## Post-Install Configuration
@@ -24,7 +24,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install main/pix
 After installation, first confirm that `pixi` is available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi --version
 ```
 
 ### Project files are not created automatically by installation
@@ -34,13 +34,13 @@ Workspace files such as `pixi.toml` and `pixi.lock` belong to a Pixi project. Th
 If the user wants to start a new workspace, they can optionally run:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi init my_workspace
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi init my_workspace
 ```
 
 After that, dependencies can be added as needed, for example:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi add python
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi add python
 ```
 
 ### Do not treat `pixi install` as a mandatory default step
@@ -52,7 +52,7 @@ Commands such as `pixi run` and `pixi shell` will install the required environme
 If the user wants to manage global CLI tools with Pixi, they can optionally run:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi global install ruff
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi global install ruff
 ```
 
 ### Optional environment variable
@@ -66,7 +66,7 @@ Only configure it if the user explicitly wants to relocate Pixi's global environ
 If `pixi` was installed through Scoop, prefer updating it through Scoop rather than treating `pixi self-update` as the default update path:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop update pixi
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop update pixi
 ```
 
 ### Proxy and mirrors
@@ -80,25 +80,25 @@ Pixi project-level channel, mirror, and proxy configuration is not centralized i
 Basic verification:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi --version
 ```
 
 If the current directory is already a Pixi workspace, you can further verify it with:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi info
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi info
 ```
 
 If the user has already added dependencies, you can also verify environment resolution with:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pixi install
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pixi install
 ```
 
 ## Uninstall
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall pixi
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall pixi
 ```
 
 Uninstalling `pixi` itself should not automatically remove:

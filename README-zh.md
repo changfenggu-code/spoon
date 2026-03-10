@@ -1,88 +1,92 @@
-# Spoon
+﻿# Spoon
 
-Windows 开发环境管理工具集，作为 Claude Code 插件运行。
+用于管理 Windows 开发环境的 Claude Code 插件。
 
-Spoon 通过一组 skill 自动化软件安装、配置和维护，Claude Code 可在对话中调用这些 skill。
+Spoon 现在只聚焦两类能力：
+
+- Scoop 包管理器及其软件生态
+- 常见开发工具的代理与镜像配置
+
+AI 工作站初始化已经独立到仓库中的 Rust 项目 `ai-setup/`。Git、Claude Code、Codex、代理引导以及 AI 辅助 CLI 安装都由这个可执行程序负责。
 
 ## Skills
 
 ### scoop
 
-管理 [Scoop](https://scoop.sh/) 包管理器及通过它安装的所有软件。
+负责 [Scoop](https://scoop.sh/) 包管理器及其安装的软件。
 
-- 安装/卸载/更新 scoop 和软件包
-- Bucket 管理（添加、移除、列表）
-- 健康检查和缓存清理
-- 需要额外配置的工具提供安装后 recipe（如 claude-code、codex、pkl-cli）
+- 安装、卸载、更新 scoop 和 scoop 软件包
+- Bucket 管理（添加、移除、查看）
+- 健康检查与缓存清理
+- 需要额外配置的 scoop 软件 recipe（android-clt、flutter、nodejs、pixi、pkl-cli、rustup）
+
+### ai-toolchain
+
+`ai-setup.exe` 提供的工作站工具使用指南（git、gh、rg、fd、jq、yq、bat、delta、sg、python、which、make、7z、just）。
 
 ### proxy
 
-统一管理各开发工具的代理和镜像配置。
+负责统一管理代理和镜像配置。
 
-- HTTP/SOCKS5 代理：git、scoop、npm、pip、cargo、flutter 等
-- 国内镜像源（TUNA、USTC、SJTUG）
-- 跨工具统一启用/禁用
+- 为 git、scoop、npm、pip、cargo、flutter 等工具设置 HTTP/SOCKS5 代理
+- 管理国内镜像源（TUNA、USTC、SJTUG）
+- 统一启用 / 禁用代理配置
 
 ## 项目结构
 
-```
+```text
 spoon/
+├── ai-setup/                  # AI 工作站初始化 Rust CLI/TUI 项目
 ├── .claude-plugin/
-│   ├── plugin.json          # 插件元数据
-│   └── marketplace.json     # Marketplace 定义
+│   ├── plugin.json
+│   └── marketplace.json
 ├── skills/
 │   ├── scoop/
-│   │   ├── SKILL.md          # Scoop skill 定义
+│   │   ├── SKILL.md
 │   │   └── references/
-│   │       ├── commands.md       # 命令参考
-│   │       ├── commands-zh.md    # 命令参考（中文）
-│   │       ├── guide-zh.md       # Skill 指南（中文）
-│   │       └── recipes/          # 安装后配置方案
-│   │           ├── claude-code.md / claude-code-zh.md
-│   │           ├── codex.md / codex-zh.md
-│   │           └── pkl-cli.md / pkl-cli-zh.md
+│   │       ├── commands.md / commands-zh.md
+│   │       ├── guide-zh.md
+│   │       └── recipes/            # 安装后配置 recipe（英文 + 中文）
+│   │           └── android-clt, flutter, nodejs, pixi, pkl-cli, rustup
 │   ├── proxy/
-│   │   ├── SKILL.md          # Proxy skill 定义
+│   │   ├── SKILL.md
 │   │   └── references/
-│   │       └── guide-zh.md       # Skill 指南（中文）
-│   └── scripts/
-│       ├── run-cmd.ps1       # 从注册表刷新 PATH 后运行命令
-│       └── add-path.ps1      # 添加/移除 scoop 应用子目录到 PATH
-├── CLAUDE.md                 # Claude Code 项目级指令
-└── README.md
+│   │       └── guide-zh.md
+│   └── ai-toolchain/
+│       ├── SKILL.md
+│       └── SKILL-zh.md
+├── scripts/
+│   ├── run-cmd.ps1
+│   └── add-path.ps1
+├── CLAUDE.md
+├── README.md
+└── README-zh.md
 ```
 
+## AI Setup
+
+`ai-setup/` 目录包含 AI 工作站初始化的 Rust CLI/TUI 项目。构建方式：
+
+```text
+cd ai-setup && cargo xtask deploy
+```
+
+这会编译 release 版本并将 `ai-setup.exe` 拷贝到仓库根目录（已 gitignore）。示例：
+
+```text
+.\ai-setup.exe
+.\ai-setup.exe --action status --non-interactive
+.\ai-setup.exe --action install --tools git,claude,codex,rg
+```
 ## 安装
 
 在 Claude Code 中运行：
 
-```
+```text
 /plugin marketplace add VIDLG/spoon
 ```
 
-然后从 marketplace 安装 spoon 插件。安装后在所有项目中可用。
-
-### 团队配置
-
-要让团队成员在项目中自动启用 spoon，在项目的 `.claude/settings.json` 中添加：
-
-```json
-{
-  "extraKnownMarketplaces": {
-    "spoon": {
-      "source": {
-        "source": "github",
-        "repo": "VIDLG/spoon"
-      }
-    }
-  },
-  "enabledPlugins": {
-    "spoon@spoon": true
-  }
-}
-```
-
-团队成员信任项目仓库后会自动提示安装。
+然后从 marketplace 安装 spoon 插件。
 
 ## 系统要求
 
@@ -92,3 +96,5 @@ spoon/
 ## 许可证
 
 MIT
+
+

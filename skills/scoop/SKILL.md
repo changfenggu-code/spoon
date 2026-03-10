@@ -6,11 +6,10 @@ description: >
   "clean scoop cache", "check scoop health", "list installed packages", "search for a package",
   "manage dev tools", or mentions scoop, package management, or development tool
   installation/configuration on Windows. Use this skill for any scoop-related operation
-  including installing specific tools like git, nodejs, python, pkl, etc.
-  On Windows, this skill is the preferred way to install any software — when the user says
+  including installing specific tools like nodejs, python, pkl, etc. AI reserved packages are handled by `ai-setup.exe` instead.
+  On Windows, this skill is the preferred way to install any software —when the user says
   "install X", "I need X", "set up X", or "how to get X" for any development tool or CLI utility,
-  use this skill to install it via scoop first. Only fall back to other methods if scoop
-  does not have the package.
+  use this skill to install it via scoop first unless the tool is in the AI reserved package list. Only fall back to other methods if scoop does not have the package.
   For proxy/mirror configuration (set proxy, switch to gitee mirror, etc.), defer to the `proxy` skill.
 ---
 
@@ -44,9 +43,9 @@ Run `scoop --version` to check if scoop is already installed.
 
 Use AskUserQuestion to let the user choose an install directory:
 
-- Option 1: `D:\Scoop` (Recommended) — separate directory, keeps C: drive clean
-- Option 2: `~/scoop` — scoop default location
-- Option 3: Custom path — user provides their own
+- Option 1: `D:\Scoop` (Recommended) —separate directory, keeps C: drive clean
+- Option 2: `~/scoop` —scoop default location
+- Option 3: Custom path —user provides their own
 
 ### Step 3: Check if target directory exists
 
@@ -71,12 +70,12 @@ powershell -Command '[Environment]::SetEnvironmentVariable("SCOOP", "<chosen_pat
 ```
 
 Available installer parameters (use when relevant):
-- `-ScoopDir` — scoop install directory
-- `-NoProxy` — bypass system proxy during installation
+- `-ScoopDir` —scoop install directory
+- `-NoProxy` —bypass system proxy during installation
 
 The following parameters require administrator privileges. Do NOT use unless the user explicitly requests:
-- `-ScoopGlobalDir` — global apps install directory (requires admin)
-- `-RunAsAdmin` — admin mode installation (requires elevated console)
+- `-ScoopGlobalDir` —global apps install directory (requires admin)
+- `-RunAsAdmin` —admin mode installation (requires elevated console)
 
 **Shell environment note**: The installer writes environment variables to the Windows registry via `[Environment]::SetEnvironmentVariable`. However, the Bash tool in Claude Code inherits its environment from the **parent VSCode process**, not from the registry. This means:
 
@@ -84,16 +83,16 @@ The following parameters require administrator privileges. Do NOT use unless the
 - After restarting VSCode: bash will pick up the new environment
 - Even `powershell -Command "scoop ..."` may NOT work immediately, because the new PowerShell process inherits PATH from bash (its parent), not from the registry
 
-**Recommended approach**: Use `skills/scripts/run-cmd.ps1` (relative to the plugin root) to refresh PATH from the registry before running any command. This avoids bash/PowerShell quoting conflicts with `$env`, `$null`, etc.
+**Recommended approach**: Use `scripts/run-cmd.ps1` (relative to the plugin root) to refresh PATH from the registry before running any command. This avoids bash/PowerShell quoting conflicts with `$env`, `$null`, etc.
 
-Resolve the absolute path of `skills/scripts/run-cmd.ps1` based on the plugin root directory, then use it with `powershell -File`:
+Resolve the absolute path of `scripts/run-cmd.ps1` based on the plugin root directory, then use it with `powershell -File`:
 
 ```bash
 # Example (replace <plugin_root> with the plugin's absolute path):
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install git
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop bucket add extras
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git config --global init.defaultBranch main
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install git
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop bucket add extras
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git config --global init.defaultBranch main
 ```
 
 For non-scoop PowerShell commands (e.g., setting environment variables), use `powershell -Command` with single quotes in bash to protect `$` from bash interpolation:
@@ -103,7 +102,7 @@ powershell -Command '[Environment]::SetEnvironmentVariable("SCOOP", "D:\Scoop", 
 ```
 
 **Important caveats when mixing bash and PowerShell**:
-- `$env:Path`, `$null`, etc. get swallowed by bash — use single quotes or a `.ps1` file
+- `$env:Path`, `$null`, etc. get swallowed by bash —use single quotes or a `.ps1` file
 - Use `[NullString]::Value` instead of `$null` when clearing env vars via `-Command`
 - Prefer `-File` over `-Command` for anything beyond simple one-liners
 
@@ -116,27 +115,59 @@ export PATH="$SCOOP/shims:$PATH"
 
 Advise the user to **restart VSCode** after installation is complete so that all future sessions have the correct environment natively.
 
-### Step 5: Install git and gh
+### AI Reserved Packages
 
-Scoop buckets are managed by git — it must be installed before proceeding to bucket operations. gh is strongly recommended for GitHub integration.
+**Important**: The following packages are reserved for the repository-root `ai-setup.exe` executable and must not be installed or managed through this skill:
 
-→ See `references/recipes/git.md` (mandatory)
-→ See `references/recipes/gh.md` (strongly recommended)
+- `git`
+- `gh`
+- `claude-code`
+- `codex`
+- `ripgrep`
+- `fd`
+- `jq`
+- `bat`
+- `delta`
+- `ast-grep`
+- `yq`
+- `python`
+- `which`
+- `make`
+- `7zip`
+- `just`
 
-### Step 6: Confirm and add buckets
+If the user asks for any of these tools, delegate to `.\ai-setup.exe` for install, update, or uninstall.
+Preferred delegation commands:
+- `.\ai-setup.exe --action install --tools git,gh,claude,codex --non-interactive`
+- `.\ai-setup.exe --action update --tools rg,fd,jq,bat,delta,sg,yq,python,which,make,7zip,just --non-interactive`
+- `.\ai-setup.exe --action uninstall --tools codex,claude --non-interactive`
+
+### Step 5: Confirm and add buckets
 
 Use AskUserQuestion with multiSelect to let the user pick buckets to add:
 
-- `extras` (Recommended — common GUI apps and dev tools)
+- `extras` (Recommended —common GUI apps and dev tools)
 - `versions` (older/alternative versions of software)
 - `java` (JDK distributions: adoptium, zulu, etc.)
 - `nerd-fonts` (patched developer fonts)
 
 The user can also specify additional buckets via the "Other" option.
 
-Add each selected bucket: `powershell -Command "scoop bucket add <name>"`
+Add each selected bucket:
 
-### Step 7: Run scoop update
+```bash
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop bucket add <name>
+```
+
+**Known issue**: `scoop bucket add` may fail with "doesn't look like a valid git repository" when the remote has many refs (e.g., thousands of PR refs). If this happens, fall back to manual clone:
+
+```bash
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git clone --depth 1 https://github.com/ScoopInstaller/<BucketName>.git <SCOOP>/buckets/<bucket_name>
+```
+
+Scoop will automatically recognize manually cloned buckets in its `buckets/` directory.
+
+### Step 6: Run scoop update
 
 After adding buckets, run `scoop update` to pull the latest bucket manifests via git:
 
@@ -151,8 +182,7 @@ This verifies that git is working correctly with scoop and ensures all bucket da
 Report to the user:
 - `SCOOP` environment variable set to `<install_path>`
 - `<install_path>\shims` added to user PATH
-- git installed at `<install_path>\apps\git\current`
-- gh installed at `<install_path>\apps\gh\current`
+- Git must already be available on PATH for bucket operations (typically via the `ai-setup.exe` executable)
 - Buckets cloned to `<install_path>\buckets\`
 - Directories created: `<install_path>\{apps,buckets,cache,persist,shims}`
 
@@ -174,7 +204,7 @@ This is a destructive, irreversible operation. Always confirm with the user befo
    ```bash
    powershell -Command '$path = [Environment]::GetEnvironmentVariable("PATH", "User"); $cleaned = ($path -split ";" | Where-Object { $_ -notmatch "Scoop" }) -join ";"; [Environment]::SetEnvironmentVariable("PATH", $cleaned, "User")'
    ```
-5. Delete the install directory. **Important**: scoop uses NTFS junctions (e.g., `current` → version dir). PowerShell's `Remove-Item -Recurse -Force` cannot delete junctions. Use `cmd /c rmdir /s /q` instead:
+5. Delete the install directory. **Important**: scoop uses NTFS junctions (e.g., `current` →version dir). PowerShell's `Remove-Item -Recurse -Force` cannot delete junctions. Use `cmd /c rmdir /s /q` instead:
    ```bash
    powershell -Command "& cmd /c 'rmdir /s /q <install_path>'"
    ```
@@ -186,7 +216,7 @@ Proxy and mirror management is handled by the **`proxy` skill**. This skill cove
 
 When a scoop operation fails with a network/SSL error, or the user asks about proxy/mirror settings, delegate to the `proxy` skill.
 
-During scoop installation (Step 5, after git is installed), the `proxy` skill should be consulted to detect existing proxy and sync to scoop if needed.
+During scoop installation, the `proxy` skill should be consulted to detect existing proxy and sync to scoop if needed.
 
 ## Daily Operations
 
@@ -199,16 +229,7 @@ powershell -Command "scoop search <query>"
 ```bash
 powershell -Command "scoop install <app>"
 ```
-After installing, check if a recipe exists in `references/recipes/` for the app. If found (e.g., `references/recipes/claude-code.md`), read it and follow the post-install configuration steps.
-
-Some user-facing tool names map to a different scoop package and recipe name. Handle these aliases before installation. Example:
-
-- If the user asks to install **`npm`**, interpret that as installing **Node.js**.
-- Use AskUserQuestion to let the user choose **`nodejs`** or **`nodejs-lts`**. If the user has no preference, default to **`nodejs`**.
-- After installation, apply `references/recipes/nodejs.md` rather than looking for an `npm` recipe.
-- If the user asks to install **`pip`**, interpret that as installing **Python**.
-- Install **`python`** unless the user explicitly asks for a different version line.
-- After installation, apply `references/recipes/python.md` rather than looking for a `pip` recipe.
+After installing, check if a recipe exists in `references/recipes/` for the app. If found, read it and follow the post-install configuration steps. AI reserved packages are excluded and should go through `.\ai-setup.exe`.
 
 Report side effects: shims created, PATH changes, environment variables set by the app.
 
@@ -256,18 +277,18 @@ powershell -Command "scoop reset <app>"      # reset an app (re-link shims and s
 Export the list of installed apps, buckets, and their versions to a JSON file:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop export > <backup_path>/scoopfile.json
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop export > <backup_path>/scoopfile.json
 ```
 
-This only saves the **manifest** (app names, versions, bucket sources) — not the actual binaries or cached downloads.
+This only saves the **manifest** (app names, versions, bucket sources) —not the actual binaries or cached downloads.
 
 Use AskUserQuestion to let the user choose:
-1. **Backup location** — where to save `scoopfile.json` (e.g., `D:\Backup`, a cloud-synced folder, etc.)
-2. **Include download cache?** — whether to also copy `<scoop>/cache` to the backup location. This avoids re-downloading large packages (e.g., Flutter ~1GB) on restore. If yes:
+1. **Backup location** —where to save `scoopfile.json` (e.g., `D:\Backup`, a cloud-synced folder, etc.)
+2. **Include download cache?** —whether to also copy `<scoop>/cache` to the backup location. This avoids re-downloading large packages (e.g., Flutter ~1GB) on restore. If yes:
    ```bash
    powershell -Command 'Copy-Item -Path "<scoop>\cache" -Destination "<backup_path>\scoop-cache" -Recurse -Force'
    ```
-3. **Include persist data?** — whether to back up `<scoop>/persist` (app configs and data managed by scoop's persist feature). If yes:
+3. **Include persist data?** —whether to back up `<scoop>/persist` (app configs and data managed by scoop's persist feature). If yes:
    ```bash
    powershell -Command 'Copy-Item -Path "<scoop>\persist" -Destination "<backup_path>\scoop-persist" -Recurse -Force'
    ```
@@ -276,25 +297,25 @@ Use AskUserQuestion to let the user choose:
 
 Restore on a new machine (scoop must already be installed). **Order matters**:
 
-1. **Restore cache first** (if backed up) — so `scoop import` skips downloading:
+1. **Restore cache first** (if backed up) —so `scoop import` skips downloading:
    ```bash
    powershell -Command 'Copy-Item -Path "<backup_path>\scoop-cache\*" -Destination "<scoop>\cache" -Recurse -Force'
    ```
 
-2. **Import the manifest** — installs all apps and creates NTFS junctions:
+2. **Import the manifest** —installs all apps and creates NTFS junctions:
    ```bash
-   powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop import <backup_path>/scoopfile.json
+   powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop import <backup_path>/scoopfile.json
    ```
    Buckets referenced in the file are added automatically.
 
-3. **Restore persist data** (if backed up) — after import, so junctions already point to the correct new paths:
+3. **Restore persist data** (if backed up) —after import, so junctions already point to the correct new paths:
    ```bash
    powershell -Command 'Copy-Item -Path "<backup_path>\scoop-persist\*" -Destination "<scoop>\persist" -Recurse -Force'
    ```
 
-4. **Apply recipes** — check for recipes and run post-install configuration (e.g., git user config, gh auth login).
+4. **Apply recipes** — check for recipes and run post-install configuration only for scoop-managed packages that still need it.
 
-**Path safety**: Cache files are path-independent (matched by filename/hash). Persist data is also safe — `scoop import` creates new NTFS junctions pointing to the new `<scoop>/persist` location, so even if the scoop install path changed, junctions are correct. In rare cases, an app's own config files inside persist may contain hardcoded absolute paths — these would need manual fixing.
+**Path safety**: Cache files are path-independent (matched by filename/hash). Persist data is also safe —`scoop import` creates new NTFS junctions pointing to the new `<scoop>/persist` location, so even if the scoop install path changed, junctions are correct. In rare cases, an app's own config files inside persist may contain hardcoded absolute paths —these would need manual fixing.
 
 ## Recipes
 
@@ -302,14 +323,28 @@ For tools that need post-install configuration beyond just `scoop install`, reci
 
 When installing a tool, check for a matching recipe and apply it automatically.
 
-Recipe matching is based on the resolved install target, not only the exact words the user typed. If the requested tool name is an alias, first map it to the actual scoop package and recipe. Example: a request to install `npm` maps to `nodejs` or `nodejs-lts`, then uses `references/recipes/nodejs.md`.
+Available recipes:
+- `android-clt` — Android SDK Command-Line Tools
+- `flutter` — Flutter SDK (includes Dart)
+- `nodejs` — Node.js / npm
+- `pixi` — project-based package manager
+- `pkl-cli` — Apple's configuration language
+- `rustup` — Rust toolchain manager
 
-Likewise, a request to install `pip` maps to `python`, then uses `references/recipes/python.md`.
+### Alias resolution
+
+Some user requests use an alias rather than the actual scoop package name. Resolve these before installing:
+
+- User says "install npm" → install `nodejs` (or `nodejs-lts`), then apply `recipes/nodejs.md`
+- User says "install pip" → `python` is AI-reserved, delegate to `.\ai-setup.exe`
+- User says "install cargo" / "install rust" → install `rustup`, then apply `recipes/rustup.md`
+- User says "install dart" → install `flutter`, then apply `recipes/flutter.md`
+- User says "install android sdk" / "install android" → install `android-clt`, then apply `recipes/android-clt.md`
 
 ## Additional Resources
 
 ### Reference Files
-- **`references/commands.md`** — Complete scoop command reference with detailed options and examples
-- **`references/commands-zh.md`** — Chinese version of the command reference
-- **`references/guide-zh.md`** — Chinese translation of this skill for easier understanding
-- **`references/recipes/`** — Post-install configuration recipes for specific tools (added as needed)
+- **`references/commands.md`** —Complete scoop command reference with detailed options and examples
+- **`references/commands-zh.md`** —Chinese version of the command reference
+- **`references/guide-zh.md`** —Chinese translation of this skill for easier understanding
+- **`references/recipes/`** —Post-install configuration recipes for specific tools (added as needed)

@@ -23,13 +23,13 @@
 配置前先检测哪些工具已安装，使用 `run-cmd.ps1` 辅助脚本：
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 git --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 npm --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 pip --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 rustup --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 cargo --version 2>&1
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 flutter --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 git --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 npm --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 pip --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 rustup --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 cargo --version 2>&1
+powershell -File <plugin_root>/scripts/run-cmd.ps1 flutter --version 2>&1
 ```
 
 只配置已安装的工具，跳过未安装的。

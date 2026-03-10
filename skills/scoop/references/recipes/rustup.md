@@ -23,7 +23,7 @@ Keep those settings centralized there so Rust mirrors stay consistent with the r
 ## Install
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install rustup
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop install rustup
 ```
 
 ### Verify rustup is installed
@@ -31,7 +31,7 @@ powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop install rustup
 First confirm that the `rustup` binary itself is available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 rustup --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 rustup --version
 ```
 
 ## Post-Install Configuration
@@ -48,7 +48,7 @@ This step installs the default Rust toolchain, which already includes `rustc` an
 Run the default invocation to complete setup:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 rustup default stable
+powershell -File <plugin_root>/scripts/run-cmd.ps1 rustup default stable
 ```
 
 ### Configure PATH
@@ -58,14 +58,14 @@ Scoop automatically shims rustup binaries. If you need full toolchain access (li
 After initialization, verify that `rustc` and `cargo` are available:
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 rustc --version
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 cargo --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 rustc --version
+powershell -File <plugin_root>/scripts/run-cmd.ps1 cargo --version
 ```
 
 ## Verify Rust network access
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 cargo search clap
+powershell -File <plugin_root>/scripts/run-cmd.ps1 cargo search clap
 ```
 
 If mirrors or proxy were configured earlier, change or restore them through the `proxy` skill rather than editing Rust mirror files in this recipe.
@@ -73,7 +73,7 @@ If mirrors or proxy were configured earlier, change or restore them through the 
 ## Uninstall
 
 ```bash
-powershell -File <plugin_root>/skills/scripts/run-cmd.ps1 scoop uninstall rustup
+powershell -File <plugin_root>/scripts/run-cmd.ps1 scoop uninstall rustup
 ```
 
 After uninstalling, use AskUserQuestion to ask about leftover data:
